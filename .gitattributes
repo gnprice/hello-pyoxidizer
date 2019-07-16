@@ -1,0 +1,2 @@
+# Suppress noisy generated files in diffs.
+Cargo.lock -diff
