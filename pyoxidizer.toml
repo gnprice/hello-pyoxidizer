@@ -1,0 +1,119 @@
+# This file controls the PyOxidizer build configuration. See the
+# pyoxidizer crate's documentation for extensive documentation
+# on this file format.
+
+[[build]]
+application_name = "hello"
+
+[[embedded_python_config]]
+raw_allocator = "jemalloc"
+
+# dont_write_bytecode = true
+# ignore_environment = true
+# no_site = true
+# no_user_site_directory = true
+# optimize_level = 0
+# stdio_encoding = "utf-8:strict"
+# unbuffered_stdio = false
+#write_modules_directory_env = "PYOXIDIZER_WRITE_MODULES_DIR"
+
+# Windows doesn't support jemalloc.
+[[embedded_python_config]]
+build_target = "x86_64-pc-windows-msvc"
+raw_allocator = "system"
+
+[[packaging_rule]]
+type = "stdlib-extensions-policy"
+
+# Package all available extension modules from the Python distribution.
+# The Python interpreter will be fully featured.
+policy = "all"
+
+# Only package the minimal set of extension modules needed to initialize
+# a Python interpreter. Many common packages in Python's standard
+# library won't work with this setting.
+# policy = "minimal"
+
+# Only package extension modules that don't require linking against
+# non-Python libraries. e.g. will exclude support for OpenSSL, SQLite3,
+# other features that require external libraries.
+# policy = "no-libraries"
+
+# Explicit list of extension modules from the distribution to include.
+# [[packaging_rule]]
+# type = "stdlib-extensions-explicit-includes"
+# includes = ["binascii", "errno", "itertools", "math", "select", "_socket"]
+
+# Explicit list of extension modules from the distribution to exclude.
+# [[packaging_rule]
+# type = "stdlib-extensions-explicit-excludes"
+# excludes = ["_ssl"]
+
+# Package the entire Python standard library without sources.
+[[packaging_rule]]
+type = "stdlib"
+include_source = false
+
+# Write out license files next to the produced binary.
+[[packaging_rule]]
+type = "write-license-files"
+path = ""
+
+# Package .py files discovered in a local directory.
+# [[packaging_rule]]
+# type = "package-root"
+# path = "/src/mypackage"
+# packages = ["foo", "bar"]
+
+# Package things from a populated virtualenv.
+# [[packaging_rule]]
+# type = "virtualenv"
+# path = "/path/to/venv"
+
+# Filter all resources collected so far through a filter of names
+# in a file.
+# [[packaging_rule]]
+# type = "filter-include"
+# files = ["/path/to/filter-file"]
+
+# How Python should run by default. This is only needed if you
+# call ``run()``. For applications customizing how the embedded
+# Python interpreter is invoked, this section is not relevant.
+[[embedded_python_run]]
+# Run an interactive Python interpreter.
+mode = "repl"
+
+# Import a Python module and run it.
+#mode = "module"
+#module = "mypackage.__main__"
+
+# Evaluate some Python code.
+#mode = "eval"
+#code = "from mypackage import main; main()"
+
+# END OF COMMON USER-ADJUSTED SETTINGS.
+#
+# Everything below this is typically managed by PyOxidizer and doesn't need
+# to be updated by people.
+
+[[python_distribution]]
+build_target = "x86_64-apple-darwin"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190617/cpython-3.7.3-macos-20190618T0523.tar.zst"
+sha256 = "6668202a3225892ce252eff4bb53a58ac058b6a413ab9d37c026a500c2a561ee"
+[[python_distribution]]
+build_target = "x86_64-pc-windows-msvc"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190617/cpython-3.7.3-windows-amd64-20190618T0516.tar.zst"
+sha256 = "fd43554b5654a914846cf1c251d1ad366f46c7c4d20b7c44572251b533351221"
+[[python_distribution]]
+build_target = "x86_64-unknown-linux-gnu"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190617/cpython-3.7.3-linux64-20190618T0324.tar.zst"
+sha256 = "d6b80a9723c124d6d193f8816fdb874ba6d56abfb35cbfcc2b27de53176d0620"
+[[python_distribution]]
+build_target = "x86_64-unknown-linux-musl"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190617/cpython-3.7.3-linux64-musl-20190618T0400.tar.zst"
+sha256 = "2be2d109b82634b36685b89800887501b619ef946dda182e5a8ab5c7029a8136"
+
+
+[[pyoxidizer]]
+version = "0.2.0"
+commit = ""
