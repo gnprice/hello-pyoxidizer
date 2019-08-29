@@ -19,6 +19,10 @@ raw_allocator = "jemalloc"
 
 # Windows doesn't support jemalloc.
 [[embedded_python_config]]
+build_target = "i686-pc-windows-msvc"
+raw_allocator = "system"
+
+[[embedded_python_config]]
 build_target = "x86_64-pc-windows-msvc"
 raw_allocator = "system"
 
@@ -91,29 +95,36 @@ mode = "repl"
 #mode = "eval"
 #code = "from mypackage import main; main()"
 
+[[distribution]]
+type = "wix"
+
 # END OF COMMON USER-ADJUSTED SETTINGS.
 #
 # Everything below this is typically managed by PyOxidizer and doesn't need
 # to be updated by people.
 
 [[python_distribution]]
+build_target = "i686-pc-windows-msvc"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190816/cpython-3.7.4-windows-x86-20190817T0235.tar.zst"
+sha256 = "46c77de57c5ebbcc8c25e1003a77ca827763da01455b097f4e5fc0b782526c9b"
+[[python_distribution]]
 build_target = "x86_64-apple-darwin"
-url = "https://github.com/indygreg/python-build-standalone/releases/download/20190617/cpython-3.7.3-macos-20190618T0523.tar.zst"
-sha256 = "6668202a3225892ce252eff4bb53a58ac058b6a413ab9d37c026a500c2a561ee"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190816/cpython-3.7.4-macos-20190817T0220.tar.zst"
+sha256 = "4a77d5ca898196bbc977eb126d129340bab14fb6a8feaaa335675613852071de"
 [[python_distribution]]
 build_target = "x86_64-pc-windows-msvc"
-url = "https://github.com/indygreg/python-build-standalone/releases/download/20190617/cpython-3.7.3-windows-amd64-20190618T0516.tar.zst"
-sha256 = "fd43554b5654a914846cf1c251d1ad366f46c7c4d20b7c44572251b533351221"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190816/cpython-3.7.4-windows-amd64-20190817T0227.tar.zst"
+sha256 = "82ae15f31178c9854bacb5d59e00305c6f6080649c9960a29be6b92517b8e5e5"
 [[python_distribution]]
 build_target = "x86_64-unknown-linux-gnu"
-url = "https://github.com/indygreg/python-build-standalone/releases/download/20190617/cpython-3.7.3-linux64-20190618T0324.tar.zst"
-sha256 = "d6b80a9723c124d6d193f8816fdb874ba6d56abfb35cbfcc2b27de53176d0620"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190816/cpython-3.7.4-linux64-20190817T0224.tar.zst"
+sha256 = "1d3b5dc07ee2ddbb5e07bb3f737f368ea0ada088801e1e47d1f12f29cea6a851"
 [[python_distribution]]
 build_target = "x86_64-unknown-linux-musl"
-url = "https://github.com/indygreg/python-build-standalone/releases/download/20190617/cpython-3.7.3-linux64-musl-20190618T0400.tar.zst"
-sha256 = "2be2d109b82634b36685b89800887501b619ef946dda182e5a8ab5c7029a8136"
+url = "https://github.com/indygreg/python-build-standalone/releases/download/20190816/cpython-3.7.4-linux64-musl-20190817T0227.tar.zst"
+sha256 = "1b20b339fa38aa93b47f754c612fd544a4b82949b51a20b0523430b3abf1d156"
 
 
 [[pyoxidizer]]
-version = "0.2.0"
+version = "0.3.0"
 commit = ""
