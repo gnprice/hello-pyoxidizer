@@ -67,7 +67,12 @@ packages = ["hello"]
 
 [[packaging_rule]]
 type = "pip-install-simple"
-package = "area"
+package = "click"
+
+[[packaging_rule]]
+type = "package-root"
+path = "../../pysh"
+packages = ["pysh"]
 
 # Package things from a populated virtualenv.
 # [[packaging_rule]]
@@ -85,11 +90,11 @@ package = "area"
 # Python interpreter is invoked, this section is not relevant.
 [[embedded_python_run]]
 # Run an interactive Python interpreter.
-#mode = "repl"
+mode = "repl"
 
 # Import a Python module and run it.
-mode = "module"
-module = "hello.hello"
+#mode = "module"
+#module = "hello.hello"
 
 # Evaluate some Python code.
 #mode = "eval"
