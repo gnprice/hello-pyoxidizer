@@ -20,8 +20,9 @@ use cpython::{
     Python, PythonObject, ToPyObject,
 };
 
-use super::config::{PythonConfig, PythonRawAllocator, PythonRunMode};
+use super::config::{PythonConfig, PythonRawAllocator, PythonRunMode, TerminfoResolution};
 use super::importer::PyInit__pyoxidizer_importer;
+use super::osutils::resolve_terminfo_dirs;
 #[cfg(feature = "jemalloc-sys")]
 use super::pyalloc::make_raw_jemalloc_allocator;
 use super::pyalloc::{make_raw_rust_memory_allocator, RawAllocator};
@@ -142,6 +143,18 @@ impl<'a> MainPythonInterpreter<'a> {
     ///
     /// The Python interpreter is initialized as a side-effect. The GIL is held.
     pub fn new(config: PythonConfig) -> Result<MainPythonInterpreter<'a>, &'static str> {
+        match config.terminfo_resolution {
+            TerminfoResolution::Dynamic => {
+                if let Some(v) = resolve_terminfo_dirs() {
+                    env::set_var("TERMINFO_DIRS", &v);
+                }
+            }
+            TerminfoResolution::Static(ref v) => {
+                env::set_var("TERMINFO_DIRS", v);
+            }
+            TerminfoResolution::None => {}
+        }
+
         let (raw_allocator, raw_rust_allocator) = match config.raw_allocator {
             PythonRawAllocator::Jemalloc => (Some(raw_jemallocator()), None),
             PythonRawAllocator::Rust => (None, Some(make_raw_rust_memory_allocator())),
@@ -272,15 +285,27 @@ impl<'a> MainPythonInterpreter<'a> {
             }
         }
 
-        let home =
-            OwnedPyStr::from_str(exe.to_str().ok_or_else(|| "unable to convert exe to str")?)?;
+        // TODO call PyImport_ExtendInitTab to avoid O(n) overhead.
+        for e in &config.extra_extension_modules {
+            let res = unsafe {
+                pyffi::PyImport_AppendInittab(e.name.as_ptr() as *const i8, Some(e.init_func))
+            };
+
+            if res != 0 {
+                return Err("unable to register extension module");
+            }
+        }
+
+        let exe_str = exe.to_str().ok_or_else(|| "unable to convert exe to str")?;
+
+        let home = OwnedPyStr::from_str(exe_str)?;
 
         unsafe {
             // Pointer needs to live for lifetime of interpreter.
             pyffi::Py_SetPythonHome(home.as_wchar_ptr());
         }
 
-        let program_name = OwnedPyStr::from_str(config.program_name.as_str())?;
+        let program_name = OwnedPyStr::from_str(exe_str)?;
 
         unsafe {
             pyffi::Py_SetProgramName(program_name.as_wchar_ptr());
